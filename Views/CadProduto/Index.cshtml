@@ -1,0 +1,65 @@
+﻿@model List<olx.Models.ProdutoModel>
+@{
+    Layout = "~/Views/Shared/_Cadastro.cshtml";
+    ViewBag.Title = "Produtos";
+    ViewBag.Lista = Model;
+}
+
+@section Styles {
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Content/Cadastro/Produto.css" rel="stylesheet" />
+    <style>
+        .dialogo > .modal-dialog {
+            width: 700px !important;
+        }
+    </style>
+}
+
+@section TituloGrid {
+    <th>Código</th>
+    <th>Nome</th>
+    <th>Quantidade</th>
+    <th>Ativo</th>
+    <th>Ação</th>
+}
+@section Scripts{
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script>
+        var tituloPagina = '@ViewBag.Title';
+        var url_excluir = '@Url.Action("ExcluirProduto", "CadProduto")';
+        var url_confirmar = '@Url.Action("SalvarProduto", "CadProduto")';
+        var url_page_click = '@Url.Action("ProdutoPagina", "CadProduto")';
+        var url_tam_pag_change = '@Url.Action("ProdutoPagina", "CadProduto")';
+        var url_alterar = '@Url.Action("RecuperarProduto", "CadProduto")';
+        var linhas = [];
+        @{
+            var linha = 0;
+            foreach (var item in Model)
+            {
+                linha++;
+                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
+                {
+                    @:linhas.push(@Html.Raw(Json.Encode(item)));
+                        }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    </script>
+    <script id="template-grid" type="x-tmpl-mustache">
+        <tr data-id="{{ Id }}">
+            <td>{{ Codigo }}</td>
+            <td>{{ Nome }}</td>
+            <td>{{ QuantEstoque }}</td>
+            <td>{{ #Ativo }}SIM{{ /Ativo }}{{ ^Ativo }}NÃO{{ /Ativo }}</td>
+            <td>
+                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
+                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
+            </td>
+        </tr>
+    </script>
+    <script src="~/Scripts/Cadastro/Produto.js"></script>
+}
